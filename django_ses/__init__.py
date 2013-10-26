@@ -48,7 +48,7 @@ class SESBackend(BaseEmailBackend):
                  aws_secret_key=None, aws_region_name=None,
                  aws_region_endpoint=None, aws_auto_throttle=None,
                  dkim_domain=None, dkim_key=None, dkim_selector=None,
-                 dkim_headers=None, **kwargs):
+                 dkim_headers=None, dkim_enabled=None, **kwargs):
 
         super(SESBackend, self).__init__(fail_silently=fail_silently, **kwargs)
         self._access_key_id = aws_access_key or settings.ACCESS_KEY
@@ -62,7 +62,11 @@ class SESBackend(BaseEmailBackend):
         self.dkim_key = dkim_key or settings.DKIM_PRIVATE_KEY
         self.dkim_selector = dkim_selector or settings.DKIM_SELECTOR
         self.dkim_headers = dkim_headers or settings.DKIM_HEADERS
-
+        self.dkim_enabled = dkim_enabled or settings.DJANGO_DKIM_ENABLED
+        # Clear dkim key to disable dkim if not enabled
+        if not self.dkim_enabled:
+            self.dkim_key = None
+        
         self.connection = None
 
     def open(self):
@@ -154,6 +158,7 @@ class SESBackend(BaseEmailBackend):
                 # end of throttling
 
             try:
+
                 response = self.connection.send_raw_email(
                     source=source or message.from_email,
                     destinations=message.recipients(),
