@@ -20,7 +20,7 @@ AWS_SES_REGION_ENDPOINT = getattr(settings, 'AWS_SES_REGION_ENDPOINT',
 AWS_SES_AUTO_THROTTLE = getattr(settings, 'AWS_SES_AUTO_THROTTLE', 0.5)
 AWS_SES_RETURN_PATH = getattr(settings, 'AWS_SES_RETURN_PATH', None)
 
-DJANGO_DKIM_ENABLED = getattr(settings, 'DJANGO_DKIM_ENABLED', None)
+DJANGO_DKIM_ENABLED = getattr(settings, 'DJANGO_DKIM_ENABLED', False)
 DKIM_DOMAIN = getattr(settings, "DKIM_DOMAIN", None)
 DKIM_PRIVATE_KEY = getattr(settings, 'DKIM_PRIVATE_KEY', None)
 DKIM_SELECTOR = getattr(settings, 'DKIM_SELECTOR', 'ses')
